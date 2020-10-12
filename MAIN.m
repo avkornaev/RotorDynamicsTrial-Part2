@@ -53,6 +53,3 @@ grid on
 
 fprintf ('The correct answers are approximately equal to:')
 correctAnswers=struct('F1',0,'F2',-0.8,'M',-0.0034,'Q',0.137)
-
-% fprintf ('F1=0 N, F2=0.8 N, M=0.0034 N*m')
-% fprintf ('Q=0.137 liters per minute')
