@@ -47,17 +47,12 @@ subM=zeros(m(3),m(1));
 %Enter your code here
 
 % Matrices of coefficients 
-A=-2*hpow3*((1/(s(1)^2))+(1/(s(3)^2)));
-B=hpow3*(1/(s(3)^2));
-%B=B+200;%check
-C=hpow3*(1/(s(3)^2));
-%C=C+300;%check
-D=(hpow3/(s(1)^2))+dhpow3dx1*(1/(2*s(1)));
-%D=D+400;%check
-E=(hpow3/(s(1)^2))-dhpow3dx1*(1/(2*s(1)));
-%E=E+500;%check
-G=6*mu*du1hdx1-12*mu*u2;
-%G=G+1;%check
+%A=;
+%B=;
+%C=;
+%D=;
+%E=;
+%G=;
 %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 % Matrix form for the Reynolds equation: Lambda*P=Gamma
@@ -67,38 +62,35 @@ for k=1:n %number of the Reynolds equation in a specific point (i,j)
     %[i;j;k]
     Lambda(k,k) =A(i,j);%filling the diagonal components of the 'A' matrix
     Gamma(k)=G(i,j);%filling the right part of the matrix Reynolds equation
-    %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    %Enter your code here and complete filling the 'Lambda' and the 'Gamma'
     if i~=1
         Lambda(k,k-m(1))=C(i,j);
     else
         Gamma(k)=Gamma(k)-C(i,j)*p0(1);
     end
+    %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    %Enter your code here and complete filling the 'Lambda' and the 'Gamma'
+
     
-    if i~=m(3)
-        Lambda(k,k+m(1))=B(i,j);
-    else
-        Gamma(k)=Gamma(k)-B(i,j)*p0(2);
-    end
     
-    if j~=1
-        Lambda(k,k-1)=E(i,j);
-    else
-        Lambda(k,k+m(1)-1)=E(i,j);
-    end
-    if j~=m(1)
-        Lambda(k,k+1)=D(i,j);
-    else
-        Lambda(k,k-m(1)+1)=D(i,j);
-    end
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 end
 
 %2D pressure field
 p=Lambda\Gamma;%solving matrix equation
-p=reshape(p,[m(3) m(1)]);%a row to matrix
-p=[p p(:,1)];%a row for the 2*pi angle
+
+p=reshape(p,[m(1) m(3)]);%a row to matrix
+p=p';%matrix transpose 
+p=[ p p(:,1)];%a row for the 2*pi angle
 
 %Projections of the resulting force and the torque
 x1=static.x1;%return the full matrix x1 
@@ -110,15 +102,12 @@ p=[p0(1)*ones(1,length(x1)); p ;...
 for i=1:length(x3)
     for j=1:length(x1)
         subF1(i,j)=-p(i,j)*sin(x1(j)/r);
-        %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        %Enter your code here
         subF2(i,j)=-p(i,j)*cos(x1(j)/r);
         subM(i,j)=-r*(diffmy(j,p(i,:),s(1))*(h(j)/2)+u1(j)*mu/h(j));
-        %!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     end
 end
-F1=dblintegral(subF1)*(2*pi*r*L);%the correct answer is about 0 N    
-F2=dblintegral(subF2)*(2*pi*r*L);%the correct answer is about -10.5 N    
-M = dblintegral(subM)*(2*pi*r*L); %the correct answer is about 0.0034 N*m    
+F1=dblintegral(subF1)*(2*pi*r*L);% N    
+F2=dblintegral(subF2)*(2*pi*r*L);% N    
+M = dblintegral(subM)*(2*pi*r*L);% N*m
 end
 
